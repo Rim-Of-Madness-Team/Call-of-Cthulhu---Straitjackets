@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ThoughtDefs>
+
+	<ThoughtDef>
+		<defName>WoreStraitjacket</defName>
+		<durationDays>3</durationDays>
+		<stackLimit>1</stackLimit>
+		<stages>
+			<li>
+				<label>wore straitjacket</label>
+				<description>The colony had me wear a strait jacket for a while.</description>
+				<baseMoodEffect>-8</baseMoodEffect>
+			</li>
+		</stages>
+	</ThoughtDef>
+	
+	<ThoughtDef>
+		<defName>ColonistWoreStraitjacket</defName>
+		<durationDays>3</durationDays>
+		<nullifyingTraits>
+		  <li>Psychopath</li>
+		</nullifyingTraits>		
+		<stackLimit>1</stackLimit>
+		<stages>
+			<li>
+				<label>colonist wore straitjacket</label>
+				<description>What kind of colony is this turning into?</description>
+				<baseMoodEffect>-5</baseMoodEffect>
+			</li>
+		</stages>
+	</ThoughtDef>
+	
+</ThoughtDefs>
