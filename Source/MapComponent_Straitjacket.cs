@@ -70,14 +70,15 @@ namespace StraitJacket
                 if (map.mapPawns.FreeColonists != null)
                 {
 
-                    List<Pawn> colonists = new List<Pawn>(map.mapPawns.FreeColonists);
-                    List<Pawn> prisoners = new List<Pawn>(Prisoners(map));
+                    HashSet<Pawn> colonists = new HashSet<Pawn>(map.mapPawns.FreeColonists);
+                    HashSet<Pawn> prisoners = new HashSet<Pawn>(Prisoners(map));
+                    HashSet<Pawn> others = new HashSet<Pawn>(map.mapPawns.AllPawns.Where(x => (x?.RaceProps?.Humanlike ?? false) && x?.Faction != Faction.OfPlayer));
                     bool giveThoughtToAll = false;
                     Pawn straightjackedPawn = null;
                     Hediff pawnJacketHediff = null;
-
+                    
                     //Check our prisoners first
-                    foreach (Pawn p in prisoners)
+                    foreach (Pawn p in prisoners.Concat(others))
                     {
                         
                         if (p.apparel != null)

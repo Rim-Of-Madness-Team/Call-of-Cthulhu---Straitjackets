@@ -15,6 +15,7 @@ namespace StraitJacket
 
         private const TargetIndex StraitjacketIndex = TargetIndex.B;
 
+        
         protected Pawn Takee
         {
             get
@@ -31,72 +32,18 @@ namespace StraitJacket
             }
         }
 
-        
-
         // Verse.Pawn
         public bool CheckAcceptStraitJacket(Pawn victim, Pawn arrester)
         {
+            if (victim.Faction != arrester.Faction || victim.InMentalState) 
+            {
+                if (JecsTools.GrappleUtility.TryGrapple(arrester, victim))
+                    return true;
+                return false;
+            }
             return true;
-        //    if (victim.health.Downed)
-        //    {
-        //        return true;
-        //    }
-        //    if (victim.story != null && victim.story.WorkTagIsDisabled(WorkTags.Violent))
-        //    {
-        //        return true;
-        //    }
-        //    if (victim.Faction != null && victim.Faction != arrester.Faction)
-        //    {
-        //        victim.Faction.Notify_MemberCaptured(victim, arrester.Faction);
-        //    }
-        //    //50% chance of failure.
-        //    if (Rand.Value < 0.5f)
-        //    {
-        //        return true;
-        //    }
-        //    //Is the victim exhausted?
-        //    if (victim.needs != null)
-        //    {
-        //        if (victim.needs.rest != null)
-        //        {
-        //            if (victim.needs.rest.CurLevel < 0.2)
-        //            {
-        //                Messages.Message("OverpoweredExhausted".Translate(new object[]
-        //                    {
-        //                    victim.LabelShort
-        //                    }), MessageSound.Benefit);
-        //                return true;
-        //            }
-        //        }
-        //    }
-
-        //    //Does the arrester have a higher melee skill?.
-        //    if (arrester.skills != null && victim.skills != null)
-        //    {
-
-        //        if (arrester.skills.GetSkill(SkillDefOf.Melee).Level > victim.skills.GetSkill(SkillDefOf.Melee).Level)
-        //        {
-        //            if (Rand.Value < 0.75f)
-        //            {
-        //                Messages.Message("OverpoweredMelee".Translate(new object[]
-        //                    {
-        //                    arrester.LabelShort,
-        //                    victim.LabelShort
-        //                    }), MessageSound.Benefit);
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    Messages.Message("MessageRefusedStraitjacket".Translate(new object[]
-        //    {
-        //victim.LabelShort
-        //    }), victim, MessageSound.SeriousAlert);
-        //    if (victim.Faction == null || !arrester.HostileTo(victim))
-        //    {
-        //        victim.mindState.mentalStateHandler.TryStartMentalState(MentalStateDefOf.Berserk, null, false, false, null);
-        //    }
-        //    return false;
         }
+
 
         public override bool TryMakePreToilReservations()
         {
@@ -112,7 +59,7 @@ namespace StraitJacket
             yield return Toils_Reserve.Reserve(TargetIndex.B, 1);
             yield return Toils_Goto.GotoThing(TargetIndex.B, PathEndMode.OnCell);
             yield return Toils_Haul.StartCarryThing(TargetIndex.B, false, false);
-            yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
+            yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.Touch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
             yield return new Toil
             {
                 initAction = delegate
@@ -157,6 +104,12 @@ namespace StraitJacket
                 initAction = delegate
                 {
                     Takee.apparel.Wear(Straitjacket);
+                    Hediff pawnJacketHediff = Takee.health.hediffSet.GetFirstHediffOfDef(StraitjacketDefOf.ROM_RestainedByStraitjacket);
+                    if (pawnJacketHediff == null)
+                    {
+                        pawnJacketHediff = HediffMaker.MakeHediff(StraitjacketDefOf.ROM_RestainedByStraitjacket, Takee);
+                        Takee.health.AddHediff(pawnJacketHediff);
+                    }
                 }, defaultCompleteMode = ToilCompleteMode.Instant
             };
             yield break;
