@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <ModMetaData>
-	<name>Call of Cthulhu - Straitjackets A16</name>
+	<name>Call of Cthulhu - Straitjackets</name>
 	<author>Jecrell</author>
-	<targetVersion>0.16.1393</targetVersion>
+	<targetVersion>0.18.0</targetVersion>
 	<description>
-	V1.1.4
-	
+	V1.18.0.0
+
 	Straitjackets prevent colonists from hurting themselves and others by disabling mental breaks.</description>
 </ModMetaData>

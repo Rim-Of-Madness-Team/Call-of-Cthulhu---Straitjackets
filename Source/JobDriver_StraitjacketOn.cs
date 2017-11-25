@@ -19,7 +19,7 @@ namespace StraitJacket
         {
             get
             {
-                return (Pawn)base.CurJob.GetTarget(TargetIndex.A).Thing;
+                return (Pawn)base.job.GetTarget(TargetIndex.A).Thing;
             }
         }
 
@@ -27,7 +27,7 @@ namespace StraitJacket
         {
             get
             {
-                return (Apparel)base.CurJob.GetTarget(TargetIndex.B).Thing;
+                return (Apparel)base.job.GetTarget(TargetIndex.B).Thing;
             }
         }
 
@@ -98,6 +98,10 @@ namespace StraitJacket
         //    return false;
         }
 
+        public override bool TryMakePreToilReservations()
+        {
+            return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null) && this.pawn.Reserve(this.job.targetB, this.job, 1, -1, null);
+        }
 
         [DebuggerHidden]
         protected override IEnumerable<Toil> MakeNewToils()

@@ -9,7 +9,7 @@
 
 
   <HediffDef ParentName="DiseaseBase">
-    <defName>RestainedByStraitjacket</defName>
+    <defName>ROM_RestainedByStraitjacket</defName>
     <label>restrained</label>
     <stages>
       <li>

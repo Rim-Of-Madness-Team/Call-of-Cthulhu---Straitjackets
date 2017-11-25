@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ThingDefs>
+<Defs>
 
   <ThingDef Name="ApparelBase" Abstract="True">
     <thingClass>Apparel</thingClass>
@@ -49,7 +49,7 @@
   
 
 	<ThingDef ParentName="ApparelMakeableBase">
-		<defName>Straitjacket</defName>
+		<defName>ROM_Straitjacket</defName>
         <thingClass>Straitjacket.Apparel_Straitjacket</thingClass>		
 		<description>This is a jacket with overlong sleeves used to prevent individuals from harming themselves or others.
 		</description>
@@ -81,17 +81,18 @@
 		  <WorkSpeedGlobal>-0.98</WorkSpeedGlobal>
 		  <MoveSpeed>-0.70</MoveSpeed>	  
 		</equippedStatOffsets>
+		<generateAllowChance>0.0</generateAllowChance>
+		<generateCommonality>0.0</generateCommonality>
 		<apparel>
 			<bodyPartGroups>
 				<li>Torso</li>
 				<li>Shoulders</li>
 				<li>Arms</li>
 			</bodyPartGroups>
-			<worngraphicPath>Apparel/Bodywear_Clothing/StraitJacket/ROMStraitJacket</worngraphicPath>
+			<wornGraphicPath>Apparel/Bodywear_Clothing/StraitJacket/ROMStraitJacket</wornGraphicPath>
 			<layers>
 				<li>Shell</li>
 			</layers>
-			<commonality>0</commonality>
 			<tags>
 				<li>CallOfCthulhu_InsanePawn</li>
 			</tags>
@@ -109,4 +110,4 @@
 		<colorGenerator Class="ColorGenerator_StandardApparel" />
 	</ThingDef>
   
-</ThingDefs>
+</Defs>

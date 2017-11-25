@@ -28,9 +28,6 @@ namespace StraitJacket
         private Map mapRecord = null;
         private int lazyTick = 750;
 
-        private ThoughtDef WoreStraitjacket = ThoughtDef.Named("WoreStraitjacket");
-        private ThoughtDef ColonistWoreStraitjacket = ThoughtDef.Named("ColonistWoreStraitjacket");
-
         public MapComponent_StraitJacket(Map map) : base(map)
         {
             this.map = map;
@@ -88,18 +85,18 @@ namespace StraitJacket
                             bool jacketOn = false;
                             foreach (Apparel apparel in p.apparel.WornApparel)
                             {
-                                if (apparel.def.defName == "Straitjacket")
+                                if (apparel.def == StraitjacketDefOf.ROM_Straitjacket)
                                 {
                                     jacketOn = true;
-                                    Log.Message("Straitjacket Prisoner Check");
+                                    //Log.Message("Straitjacket Prisoner Check");
 
                                     straightjackedPawn = p;
-                                    p.needs.mood.thoughts.memories.TryGainMemoryThought(WoreStraitjacket);
+                                    p.needs.mood.thoughts.memories.TryGainMemory(StraitjacketDefOf.ROM_WoreStraitjacket);
 
-                                    pawnJacketHediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("RestainedByStraitjacket"));
+                                    pawnJacketHediff = p.health.hediffSet.GetFirstHediffOfDef(StraitjacketDefOf.ROM_RestainedByStraitjacket);
                                     if (pawnJacketHediff == null)
                                     {
-                                        pawnJacketHediff = HediffMaker.MakeHediff(HediffDef.Named("RestainedByStraitjacket"), p);
+                                        pawnJacketHediff = HediffMaker.MakeHediff(StraitjacketDefOf.ROM_RestainedByStraitjacket, p);
                                         p.health.AddHediff(pawnJacketHediff);
                                     }
                                 }
@@ -107,7 +104,7 @@ namespace StraitJacket
 
                             if (!jacketOn)
                             {
-                                pawnJacketHediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("RestainedByStraitjacket"));
+                                pawnJacketHediff = p.health.hediffSet.GetFirstHediffOfDef(StraitjacketDefOf.ROM_RestainedByStraitjacket);
                                 if (pawnJacketHediff != null)
                                 {
                                     p.health.RemoveHediff(pawnJacketHediff);
@@ -125,15 +122,15 @@ namespace StraitJacket
 
                             foreach (Apparel apparel in p.apparel.WornApparel)
                             {
-                                if (apparel.def.defName == "Straitjacket")
+                                if (apparel.def == StraitjacketDefOf.ROM_Straitjacket)
                                 {
                                     straightjackedPawn = p;
-                                    p.needs.mood.thoughts.memories.TryGainMemoryThought(WoreStraitjacket);
+                                    p.needs.mood.thoughts.memories.TryGainMemory(StraitjacketDefOf.ROM_WoreStraitjacket);
                                     jacketOn = true;
 
                                     if (pawnJacketHediff == null)
                                     {
-                                        pawnJacketHediff = HediffMaker.MakeHediff(HediffDef.Named("RestainedByStraitjacket"), p);
+                                        pawnJacketHediff = HediffMaker.MakeHediff(StraitjacketDefOf.ROM_RestainedByStraitjacket, p);
                                         p.health.AddHediff(pawnJacketHediff);
                                     }
 
@@ -142,7 +139,7 @@ namespace StraitJacket
                             }
                             if (!jacketOn)
                             {
-                                pawnJacketHediff = p.health.hediffSet.GetFirstHediffOfDef(HediffDef.Named("RestainedByStraitjacket"));
+                                pawnJacketHediff = p.health.hediffSet.GetFirstHediffOfDef(StraitjacketDefOf.ROM_RestainedByStraitjacket);
                                 if (pawnJacketHediff != null)
                                 {
                                     p.health.RemoveHediff(pawnJacketHediff);
@@ -156,7 +153,7 @@ namespace StraitJacket
                         {
                             if (p != straightjackedPawn)
                             {
-                                p.needs.mood.thoughts.memories.TryGainMemoryThought(ColonistWoreStraitjacket);
+                                p.needs.mood.thoughts.memories.TryGainMemory(StraitjacketDefOf.ROM_ColonistWoreStraitjacket);
                             }
                         }
                     }
@@ -168,7 +165,7 @@ namespace StraitJacket
         public override void ExposeData()
         {
             base.ExposeData();
-            Scribe_Values.LookValue<int>(ref this.lazyTick, "lazyTick", 750, false);
+            Scribe_Values.Look<int>(ref this.lazyTick, "lazyTick", 750, false);
         }
     }
 }

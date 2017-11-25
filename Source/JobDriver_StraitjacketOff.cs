@@ -17,8 +17,13 @@ namespace StraitJacket
         {
             get
             {
-                return (Pawn)base.CurJob.GetTarget(TargetIndex.A).Thing;
+                return (Pawn)base.job.GetTarget(TargetIndex.A).Thing;
             }
+        }
+
+        public override bool TryMakePreToilReservations()
+        {
+            return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null) && this.pawn.Reserve(this.job.targetB, this.job, 1, -1, null);
         }
 
         [DebuggerHidden]
@@ -42,7 +47,7 @@ namespace StraitJacket
             {
                 initAction = delegate
                 {
-                    Apparel straitjacket = Takee.apparel.WornApparel.FirstOrDefault((Apparel x) => x.def.defName == "Straitjacket");
+                    Apparel straitjacket = Takee.apparel.WornApparel.FirstOrDefault((Apparel x) => x.def == StraitjacketDefOf.ROM_Straitjacket);
                     Apparel straitjacketOut;
                     if (straitjacket != null)
                     {

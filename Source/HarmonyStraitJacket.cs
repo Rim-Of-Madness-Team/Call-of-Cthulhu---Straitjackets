@@ -8,6 +8,7 @@ using Verse;
 using Verse.AI;
 using System.Reflection;
 using UnityEngine;
+using System.Runtime.CompilerServices;
 
 namespace StraitJacket
 {
@@ -24,26 +25,78 @@ namespace StraitJacket
     {
         //Static Constructor
         /*
-         * Contains 4 Harmony patches.
+         * Contains 4 Harmony patches for 4 vanilla methods.
          * ===================
          * 
-         * [PREFIX] MentalBreaker -> TryDoRandomMoodCausedMentalBreak
          * [PREFIX] JobGiver_OptimizeApparel -> SetNextOptimizeTick
-         * [POSTFIX] FloatMenuMaker -> AddHumanlikeOrders
+         * [POSTFIX] ITab_Pawn_Gear -> InterfaceDrop
+         * [POSTFIX] MentalBreaker -> get_CurrentPossibleMoodBreaks
          * [POSTFIX] FloatMenuMakerMap -> AddHumanlikeOrders
          * 
          */
         static HarmonyStraitJacket()
         {
             HarmonyInstance harmony = HarmonyInstance.Create("rimworld.jecrell.straitjacket");
-
-            harmony.Patch(typeof(MentalBreaker).GetMethod("TryDoRandomMoodCausedMentalBreak"), new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("TryDoRandomMoodCausedMentalBreakPreFix")), null);
-            harmony.Patch(AccessTools.Method(typeof(FloatMenuMakerMap), "AddHumanlikeOrders"), null, new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("AddHumanlikeOrdersPostFix")));
             harmony.Patch(AccessTools.Method(typeof(JobGiver_OptimizeApparel), "SetNextOptimizeTick"), new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("SetNextOptimizeTickPreFix")), null);
             harmony.Patch(AccessTools.Method(typeof(ITab_Pawn_Gear), "InterfaceDrop"), new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("InterfaceDropPreFix")), null);
+            harmony.Patch(AccessTools.Method(typeof(MentalBreaker), "get_CurrentPossibleMoodBreaks"), null, new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("CurrentPossibleMoodBreaksPostFix")), null);
+            harmony.Patch(AccessTools.Method(typeof(FloatMenuMakerMap), "AddHumanlikeOrders"), null, new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("AddHumanlikeOrdersPostFix")));
         }
-        
 
+        // Verse.MentalBreaker
+        public static void CurrentPossibleMoodBreaksPostFix(MentalBreaker __instance, ref IEnumerable<MentalBreakDef> __result)
+        {
+            //Declare variables for the process
+            var pawn = (Pawn)AccessTools.Field(typeof(MentalBreaker), "pawn").GetValue(__instance);
+
+            //IsWearingStraitJacket
+            if (pawn?.apparel?.WornApparel?.FirstOrDefault(x => x.def == StraitjacketDefOf.ROM_Straitjacket) != null)
+            {
+                var thought = (Thought)AccessTools.Method(typeof(MentalBreaker), "RandomFinalStraw").Invoke(__instance, new object[] { });
+                string reason = thought?.LabelCap ?? "";
+
+                //Reset the mind state because we probably tried to start something before this process started.
+                //pawn.mindState.mentalStateHandler.Reset();
+
+                MentalBreakDef mentalBreakDef = null;
+                if (!(__result?.TryRandomElementByWeight((MentalBreakDef d) => d.Worker.CommonalityFor(pawn), out mentalBreakDef) ?? false))
+                {
+                    return;
+                }
+
+                if (Rand.Range(0, 100) < 95) //95% of the time
+                {
+                    Cthulhu.Utility.DebugReport("StraitJacket :: Mental Break Triggered");
+                    var stateDef = mentalBreakDef?.mentalState ?? ((Rand.Value > 0.5f) ? DefDatabase<MentalStateDef>.GetNamed("Berserk") : DefDatabase<MentalStateDef>.GetNamed("WanderPsychotic"));
+                    string label = "MentalBreakAvertedLetterLabel".Translate() + ": " + stateDef.beginLetterLabel;
+                    string text = string.Format(stateDef.beginLetter, pawn.Label).AdjustedFor(pawn).CapitalizeFirst();
+                    if (reason != null)
+                    {
+                        text = text + "\n\n" + "StraitjacketBenefit".Translate(new object[]
+                        {
+                        pawn.gender.GetPossessive(),
+                        pawn.gender.GetObjective(),
+                        pawn.gender.GetObjective() + "self"
+                        });
+                    }
+                    Find.LetterStack.ReceiveLetter(label, text, stateDef.beginLetterDef, pawn, null);
+                    __result = new List<MentalBreakDef>();
+                    return;
+                }
+                //StripStraitJacket
+                if (pawn?.apparel?.WornApparel?.FirstOrDefault(x => x.def == StraitjacketDefOf.ROM_Straitjacket) is Apparel clothing)
+                {
+                    if (pawn?.apparel?.TryDrop(clothing, out Apparel droppedClothing, pawn.Position, true) != null)
+                    {
+                        Messages.Message("StraitjacketEscape".Translate(pawn.LabelCap), MessageTypeDefOf.ThreatBig);// MessageSound.SeriousAlert);
+                        pawn.mindState.mentalStateHandler.TryStartMentalState(mentalBreakDef.mentalState, reason, false, true, null);
+                        __result = new List<MentalBreakDef>();
+
+
+                    }
+                }
+            }
+        }
         // RimWorld.ITab_Pawn_Gear
         /*
          *  PreFix
@@ -61,12 +114,12 @@ namespace StraitJacket
             {
                 if (apparel != null && __pawn.apparel != null && __pawn.apparel.WornApparel.Contains(apparel))
                 {
-                    if (apparel.def.defName == "Straitjacket")
+                    if (apparel.def == StraitjacketDefOf.ROM_Straitjacket)
                     {
                         Messages.Message("CannotRemoveByOneself".Translate(new object[]
                         {
                         __pawn.Label
-                        }), MessageSound.RejectInput);
+                        }), MessageTypeDefOf.RejectInput);//MessageSound.RejectInput);
                         return false;
                     }
                 }
@@ -95,7 +148,7 @@ namespace StraitJacket
                     {
                         if (wornApparel.Count > 0)
                         {
-                            if (wornApparel.FirstOrDefault((Apparel x) => x.def.defName == "Straitjacket") != null)
+                            if (wornApparel.FirstOrDefault((Apparel x) => x.def == StraitjacketDefOf.ROM_Straitjacket) != null)
                             {
                                 return false;
                             }
@@ -123,101 +176,71 @@ namespace StraitJacket
             IntVec3 c = IntVec3.FromVector3(clickPos);
             foreach (Thing current in c.GetThingList(pawn.Map))
             {
-                if (current is Pawn)
+                if (current is Pawn target && pawn != null && pawn != target && !pawn.Dead && !pawn.Downed)
                 {
-                    Pawn target = (Pawn)current;
-                    if (target != null && target.RaceProps.Humanlike)
+                    //We sadly can't handle aggro mental states or non-humanoids.
+                    if ((target?.RaceProps?.Humanlike ?? false) && !target.InAggroMentalState)
                     {
-                        //We sadly can't handle aggro mental states atm.
-                        if (!target.InAggroMentalState)
+                        //Let's proceed if our 'actor' is capable of manipulation
+                        if (pawn.health.capacities.CapableOf(PawnCapacityDefOf.Manipulation))
                         {
-                            //Does the original pawn NOT have a straitjacket on?
-                            if (pawn != null)
+                            //Does the target have a straitjacket?
+                            //We can help them remove the straitjacket.
+                            if (target?.apparel?.WornApparel?.FirstOrDefault(x => x.def == StraitjacketDefOf.ROM_Straitjacket) != null)
                             {
-                                if (pawn != target)
+                                if (!pawn.CanReach(c, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
                                 {
-                                    bool pawnWearingStraitJacket = false;
-                                    if (pawn.apparel != null)
+                                    opts.Add(new FloatMenuOption("CannotRemoveStraitjacket".Translate() + " (" + "NoPath".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null));
+                                }
+                                else if (!pawn.CanReserve(target, 1))
+                                {
+                                    opts.Add(new FloatMenuOption("CannotRemoveStraitjacket".Translate() + ": " + "Reserved".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
+                                }
+                                else
+                                {
+                                    Action action = delegate
                                     {
-                                        foreach (Apparel clothing in pawn.apparel.WornApparel)
-                                        {
-                                            if (clothing.def.defName == "Straitjacket") pawnWearingStraitJacket = true;
-                                        }
+                                        Job job = new Job(StraitjacketDefOf.ROM_TakeOffStraitjacket, target);
+                                        job.count = 1;
+                                        pawn.jobs.TryTakeOrderedJob(job);
+                                    };
+                                    opts.Add(new FloatMenuOption("RemoveStraitjacket".Translate(new object[]
+                                    {
+                                    target.LabelCap
+                                    }), action, MenuOptionPriority.High, null, target, 0f, null, null));
+                                }
+                            }
+                            //We can put one on!
+                            else
+                            {
+                                if (pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Apparel).FirstOrDefault((Thing x) => x.def == StraitjacketDefOf.ROM_Straitjacket) != null)
+                                {
+                                    if (!pawn.CanReach(c, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
+                                    {
+                                        opts.Add(new FloatMenuOption("CannotForceStraitjacket".Translate() + " (" + "NoPath".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null));
                                     }
-                                    //Then let's proceed.
-                                    if (!pawnWearingStraitJacket)
+                                    else if (!pawn.CanReserve(target, 1))
                                     {
-                                        //Does the target have a straitjacket?
-                                        bool isWearingStraitJacket = false;
-                                        if (target.apparel != null)
+                                        opts.Add(new FloatMenuOption("CannotForceStraitjacket".Translate() + ": " + "Reserved".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
+                                    }
+                                    else
+                                    {
+                                        Action action = delegate
                                         {
-                                            foreach (Apparel clothing in target.apparel.WornApparel)
-                                            {
-                                                if (clothing.def.defName == "Straitjacket") isWearingStraitJacket = true;
-                                            }
-                                        }
-
-                                        //We can help them remove the straitjacket.
-                                        if (isWearingStraitJacket)
+                                            Thing straitjacket = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(StraitjacketDefOf.ROM_Straitjacket), PathEndMode.Touch, TraverseParms.For(pawn));
+                                            Job job = new Job(StraitjacketDefOf.ROM_ForceIntoStraitjacket, target, straitjacket);
+                                            job.count = 1;
+                                            job.locomotionUrgency = LocomotionUrgency.Sprint;
+                                            pawn.jobs.TryTakeOrderedJob(job);
+                                        };
+                                        opts.Add(new FloatMenuOption("ForceStraitjacketUpon".Translate(new object[]
                                         {
-                                            if (!pawn.CanReach(c, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
-                                            {
-                                                opts.Add(new FloatMenuOption("CannotRemoveStraitjacket".Translate() + " (" + "NoPath".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null));
-                                            }
-                                            else if (!pawn.CanReserve(target, 1))
-                                            {
-                                                opts.Add(new FloatMenuOption("CannotRemoveStraitjacket".Translate() + ": " + "Reserved".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
-                                            }
-                                            else
-                                            {
-                                                Action action = delegate
-                                                {
-                                                    Job job = new Job(StraitjacketDefOf.TakeOffStraitjacket, target);
-                                                    job.count = 1;
-                                                    pawn.jobs.TryTakeOrderedJob(job);
-                                                };
-                                                opts.Add(new FloatMenuOption("RemoveStraitjacket".Translate(new object[]
-                                                {
                                     target.LabelCap
-                                                }), action, MenuOptionPriority.High, null, target, 0f, null, null));
-                                            }
-                                        }
-                                        //We can put one on!
-                                        else
-                                        {
-                                            bool straitjacketCheck = pawn.Map.listerThings.ThingsInGroup(ThingRequestGroup.Apparel).FirstOrDefault((Thing x) => x.def.defName == "Straitjacket") != null;
-                                            if (straitjacketCheck != false)
-                                            {
-                                                if (!pawn.CanReach(c, PathEndMode.OnCell, Danger.Deadly, false, TraverseMode.ByPawn))
-                                                {
-                                                    opts.Add(new FloatMenuOption("CannotForceStraitjacket".Translate() + " (" + "NoPath".Translate() + ")", null, MenuOptionPriority.Default, null, null, 0f, null, null));
-                                                }
-                                                else if (!pawn.CanReserve(target, 1))
-                                                {
-                                                    opts.Add(new FloatMenuOption("CannotForceStraitjacket".Translate() + ": " + "Reserved".Translate(), null, MenuOptionPriority.Default, null, null, 0f, null, null));
-                                                }
-                                                else
-                                                {
-                                                    Action action = delegate
-                                                    {
-                                                        Thing straitjacket = GenClosest.ClosestThingReachable(pawn.Position, pawn.Map, ThingRequest.ForDef(ThingDef.Named("Straitjacket")), PathEndMode.Touch, TraverseParms.For(pawn));
-                                                        Job job = new Job(StraitjacketDefOf.ForceIntoStraitjacket, target, straitjacket);
-                                                        job.count = 1;
-                                                        job.locomotionUrgency = LocomotionUrgency.Sprint;
-                                                        pawn.jobs.TryTakeOrderedJob(job);
-                                                    };
-                                                    opts.Add(new FloatMenuOption("ForceStraitjacketUpon".Translate(new object[]
-                                                    {
-                                    target.LabelCap
-                                                    }), action, MenuOptionPriority.High, null, target, 0f, null, null));
-                                                }
-                                            }
-                                        }
+                                        }), action, MenuOptionPriority.High, null, target, 0f, null, null));
                                     }
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -235,7 +258,7 @@ namespace StraitJacket
         public static bool TryDoRandomMoodCausedMentalBreakPreFix(MentalBreaker __instance)
         {
             //Declare variables for the process
-            Pawn pawn = (Pawn)AccessTools.Field(typeof(MentalBreaker), "pawn").GetValue(__instance);
+            var pawn = (Pawn)AccessTools.Field(typeof(MentalBreaker), "pawn").GetValue(__instance);
 
             //IsWearingStraitJacket
             bool isWearingStraitJacket = false;
@@ -243,7 +266,7 @@ namespace StraitJacket
             {
                 foreach (Apparel clothing in pawn.apparel.WornApparel)
                 {
-                    if (clothing.def.defName == "Straitjacket") isWearingStraitJacket = true;
+                    if (clothing.def == StraitjacketDefOf.ROM_Straitjacket) isWearingStraitJacket = true;
                 }
             }
             if (!isWearingStraitJacket) return true;
@@ -261,42 +284,42 @@ namespace StraitJacket
             {
                 return false;
             }
-            
-                if (Rand.Range(0, 100) < 95) //95% of the time
+
+            if (Rand.Range(0, 100) < 95) //95% of the time
+            {
+                Cthulhu.Utility.DebugReport("StraitJacket :: Mental Break Triggered");
+                MentalStateDef stateDef = mentalBreakDef.mentalState;
+                string label = "MentalBreakAvertedLetterLabel".Translate() + ": " + stateDef.beginLetterLabel;
+                string text = string.Format(stateDef.beginLetter, pawn.Label).AdjustedFor(pawn).CapitalizeFirst();
+                if (reason != null)
                 {
-                    Cthulhu.Utility.DebugReport("StraitJacket :: Mental Break Triggered");
-                    MentalStateDef stateDef = mentalBreakDef.mentalState;
-                    string label = "MentalBreakAvertedLetterLabel".Translate() + ": " + stateDef.beginLetterLabel;
-                    string text = string.Format(stateDef.beginLetter, pawn.Label).AdjustedFor(pawn).CapitalizeFirst();
-                    if (reason != null)
+                    text = text + "\n\n" + "StraitjacketBenefit".Translate(new object[]
                     {
-                        text = text + "\n\n" + "StraitjacketBenefit".Translate(new object[]
-                        {
                         pawn.gender.GetPossessive(),
                         pawn.gender.GetObjective(),
                         pawn.gender.GetObjective() + "self"
-                        });
-                    }
-                    Find.LetterStack.ReceiveLetter(label, text, stateDef.beginLetterType, pawn, null);
-                    return false;
+                    });
                 }
-                //StripStraitJacket
-                if (pawn.apparel != null)
+                Find.LetterStack.ReceiveLetter(label, text, stateDef.beginLetterDef, pawn, null);
+                return false;
+            }
+            //StripStraitJacket
+            if (pawn.apparel != null)
+            {
+                Apparel droppedClothing = null;
+                List<Apparel> clothingList = new List<Apparel>(pawn.apparel.WornApparel);
+                foreach (Apparel clothing in clothingList)
                 {
-                    Apparel droppedClothing = null;
-                    List<Apparel> clothingList = new List<Apparel>(pawn.apparel.WornApparel);
-                    foreach (Apparel clothing in clothingList)
+                    if (clothing.def == StraitjacketDefOf.ROM_Straitjacket)
                     {
-                        if (clothing.def.defName == "Straitjacket")
-                        {
-                            pawn.apparel.TryDrop(clothing, out droppedClothing, pawn.Position, true);
-                        }
+                        pawn.apparel.TryDrop(clothing, out droppedClothing, pawn.Position, true);
                     }
                 }
-                Messages.Message(pawn.LabelCap + " has escaped out of their straitjacket!", MessageSound.SeriousAlert);
+            }
+            Messages.Message("StraitjacketEscape".Translate(pawn.LabelCap), MessageTypeDefOf.ThreatBig);// MessageSound.SeriousAlert);
 
             pawn.mindState.mentalStateHandler.TryStartMentalState(mentalBreakDef.mentalState, reason, false, true, null);
-            return false;            
+            return false;
         }
     }
 }

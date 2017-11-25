@@ -1,3 +1,6 @@
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - Straitjackets 1.1\Assemblies\StraitJacket.dll
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - Straitjackets 1.1\Source\obj\Release\StraitJacket.dll
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - Straitjackets 1.1\Source\obj\Release\StraitJacket.csprojResolveAssemblyReference.cache
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Call-of-Cthulhu---Straitjackets\Assemblies\StraitJacket.dll
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.csprojResolveAssemblyReference.cache
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.dll

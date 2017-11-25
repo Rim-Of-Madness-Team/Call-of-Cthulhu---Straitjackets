@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ThoughtDefs>
+<Defs>
 
 	<ThoughtDef>
-		<defName>WoreStraitjacket</defName>
+		<defName>ROM_WoreStraitjacket</defName>
 		<durationDays>3</durationDays>
 		<stackLimit>1</stackLimit>
 		<stages>
@@ -15,7 +15,7 @@
 	</ThoughtDef>
 	
 	<ThoughtDef>
-		<defName>ColonistWoreStraitjacket</defName>
+		<defName>ROM_ColonistWoreStraitjacket</defName>
 		<durationDays>3</durationDays>
 		<nullifyingTraits>
 		  <li>Psychopath</li>
@@ -30,4 +30,4 @@
 		</stages>
 	</ThoughtDef>
 	
-</ThoughtDefs>
+</Defs>

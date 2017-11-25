@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<JobDefs>
+<Defs>
 
   <JobDef>
-		<defName>ForceIntoStraitjacket</defName>
+		<defName>ROM_ForceIntoStraitjacket</defName>
 		<driverClass>StraitJacket.JobDriver_StraitjacketOn</driverClass>
 		<reportString>forcing TargetA into straitjacket.</reportString>
 	</JobDef>
 
   <JobDef>
-		<defName>TakeOffStraitjacket</defName>
+		<defName>ROM_TakeOffStraitjacket</defName>
 		<driverClass>StraitJacket.JobDriver_StraitjacketOff</driverClass>
 		<reportString>removing TargetA's straitjacket.</reportString>
 	</JobDef>
 
 	
-</JobDefs>
+</Defs>
