@@ -37,12 +37,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Harmony19\0Harmony.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
+    <Reference Include="0JecsTools">
+      <HintPath>..\..\JecsTools\Assemblies\0JecsTools.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="JecsTools">
-      <HintPath>..\..\JecsTools\Assemblies\JecsTools.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\RimWorldWin_Data\Managed\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />

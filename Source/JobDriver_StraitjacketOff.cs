@@ -23,7 +23,7 @@ namespace StraitJacket
 
         public override bool TryMakePreToilReservations()
         {
-            return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null) && this.pawn.Reserve(this.job.targetB, this.job, 1, -1, null);
+            return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null);
         }
 
         [DebuggerHidden]
@@ -32,7 +32,6 @@ namespace StraitJacket
             this.FailOnDestroyedOrNull(TargetIndex.A);
             yield return Toils_Reserve.Reserve(TargetIndex.A, 1);
             yield return Toils_Goto.GotoThing(TargetIndex.A, PathEndMode.ClosestTouch).FailOnDespawnedNullOrForbidden(TargetIndex.A);
-            //Toil 6: Time to chant ominously
             Toil toil2 = new Toil();
             toil2.defaultCompleteMode = ToilCompleteMode.Delay;
             toil2.defaultDuration = 1000;
