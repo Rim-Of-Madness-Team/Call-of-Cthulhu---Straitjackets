@@ -72,7 +72,7 @@ namespace StraitJacket
                     {
                         if (!pawnToForceIntoStraitjacket.InAggroMentalState)
                         {
-                            GenClamor.DoClamor(pawn, 10f, ClamorType.Harm);
+                            GenClamor.DoClamor(pawn, 10f, ClamorDefOf.Harm);
                             if (!CheckAcceptStraitJacket(pawnToForceIntoStraitjacket, this.pawn))
                             {
                                 this.pawn.jobs.EndCurrentJob(JobCondition.Incompletable, true);
@@ -104,6 +104,7 @@ namespace StraitJacket
                 initAction = delegate
                 {
                     Takee.apparel.Wear(Straitjacket);
+                    Takee.outfits.forcedHandler.SetForced(Straitjacket, true);
                     Hediff pawnJacketHediff = Takee.health.hediffSet.GetFirstHediffOfDef(StraitjacketDefOf.ROM_RestainedByStraitjacket);
                     if (pawnJacketHediff == null)
                     {

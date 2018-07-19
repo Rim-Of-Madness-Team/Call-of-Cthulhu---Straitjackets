@@ -67,7 +67,7 @@ namespace StraitJacket
                 if (Rand.Range(0, 100) < 95) //95% of the time
                 {
                     Cthulhu.Utility.DebugReport("StraitJacket :: Mental Break Triggered");
-                    var stateDef = mentalBreakDef?.mentalState ?? ((Rand.Value > 0.5f) ? DefDatabase<MentalStateDef>.GetNamed("Berserk") : DefDatabase<MentalStateDef>.GetNamed("WanderPsychotic"));
+                    var stateDef = mentalBreakDef?.mentalState ?? ((Rand.Value > 0.5f) ? DefDatabase<MentalStateDef>.GetNamed("Berserk") : DefDatabase<MentalStateDef>.GetNamed("Wander_Psychotic"));
                     string label = "MentalBreakAvertedLetterLabel".Translate() + ": " + stateDef.beginLetterLabel;
                     string text = string.Format(stateDef.beginLetter, pawn.Label).AdjustedFor(pawn).CapitalizeFirst();
                     if (reason != null)

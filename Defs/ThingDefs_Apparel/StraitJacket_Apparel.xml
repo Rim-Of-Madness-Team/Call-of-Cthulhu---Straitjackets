@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <ThingDef Name="ApparelBase" Abstract="True">
+  <ThingDef Name="COCSJ_ApparelBase" Abstract="True">
     <thingClass>Apparel</thingClass>
     <category>Item</category>
     <selectable>True</selectable>
@@ -33,7 +33,7 @@
 
 
 
-  <ThingDef Name="ApparelMakeableBase" ParentName="ApparelBase" Abstract="True">
+  <ThingDef Name="COCSJ_ApparelMakeableBase" ParentName="COCSJ_ApparelBase" Abstract="True">
     <recipeMaker>
       <workSpeedStat>TailoringSpeed</workSpeedStat>
       <workSkill>Crafting</workSkill>
@@ -48,14 +48,13 @@
   </ThingDef>
   
 
-	<ThingDef ParentName="ApparelMakeableBase">
+	<ThingDef ParentName="COCSJ_ApparelMakeableBase">
 		<defName>ROM_Straitjacket</defName>
         <thingClass>Straitjacket.Apparel_Straitjacket</thingClass>		
-		<description>This is a jacket with overlong sleeves used to prevent individuals from harming themselves or others.
-		</description>
+		<description>This is a jacket with overlong sleeves used to prevent individuals from harming themselves or others.</description>
 		<label>straitjacket</label>		
 		<graphicData>
-			<texPath>Apparel/Bodywear_Clothing/StraitJacket/ROMStraitJacket_Male_front</texPath>
+			<texPath>Apparel/Bodywear_Clothing/StraitJacket/ROMStraitJacket_Male_north</texPath>
 			<graphicClass>Graphic_Single</graphicClass>
 			<shaderType>CutoutComplex</shaderType>	
 		</graphicData>

@@ -10,3 +10,12 @@ C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - St
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - Straitjackets 1.1\Assemblies\StraitJacket.dll
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - Straitjackets 1.1\Source\obj\Debug\StraitJacket.csprojResolveAssemblyReference.cache
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\Call of Cthulhu - Straitjackets 1.1\Source\obj\Debug\StraitJacket.dll
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Call-of-Cthulhu---Straitjackets\Assemblies\StraitJacket.dll
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Call-of-Cthulhu---Straitjackets\Source\obj\Debug\StraitJacket.csprojResolveAssemblyReference.cache
+D:\SteamLibrary\steamapps\common\RimWorld\Mods\Call-of-Cthulhu---Straitjackets\Source\obj\Debug\StraitJacket.dll
+D:\SteamLibrary\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Assemblies\StraitJacket.dll
+D:\SteamLibrary\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Source\obj\Debug\StraitJacket.csprojResolveAssemblyReference.cache
+D:\SteamLibrary\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Source\obj\Debug\StraitJacket.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Assemblies\StraitJacket.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Source\obj\Debug\StraitJacket.csprojResolveAssemblyReference.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Source\obj\Debug\StraitJacket.dll

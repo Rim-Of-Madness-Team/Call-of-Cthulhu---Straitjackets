@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <Defs>
 
-  <HediffDef Name="DiseaseBase" Abstract="True">
+  <HediffDef Name="COCSJ_DiseaseBase" Abstract="True">
     <hediffClass>HediffWithComps</hediffClass>
     <defaultLabelColor>(0.8, 0.8, 0.35)</defaultLabelColor>
     <initialSeverity>0.001</initialSeverity>
   </HediffDef>
 
 
-  <HediffDef ParentName="DiseaseBase">
+  <HediffDef ParentName="COCSJ_DiseaseBase">
     <defName>ROM_RestainedByStraitjacket</defName>
     <label>restrained</label>
     <stages>
@@ -16,7 +16,7 @@
         <capMods>
           <li>
             <capacity>Manipulation</capacity>
-            <offset>-1.0</offset>
+            <offset>-10.0</offset>
           </li>
         </capMods>
       </li>
