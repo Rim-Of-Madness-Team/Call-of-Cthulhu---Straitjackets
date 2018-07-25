@@ -21,7 +21,7 @@ namespace StraitJacket
             }
         }
 
-        public override bool TryMakePreToilReservations()
+        public override bool TryMakePreToilReservations(bool yeaaaa)
         {
             return this.pawn.Reserve(this.job.targetA, this.job, 1, -1, null);
         }
