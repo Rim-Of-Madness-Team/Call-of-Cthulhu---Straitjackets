@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+
+  <ROM_WoreStraitjacket.stages.0.label>A porté une camisole de force.</ROM_WoreStraitjacket.stages.0.label>
+  <ROM_WoreStraitjacket.stages.0.description>La colonie m'a forcé a porter une camisole de force pour un certain temps.</ROM_WoreStraitjacket.stages.0.description>
+
+  <ROM_ColonistWoreStraitjacket.stages.0.label>Coloniste a porté une camisole de force.</ROM_ColonistWoreStraitjacket.stages.0.label>
+  <ROM_ColonistWoreStraitjacket.stages.0.description>En quoi cette colonie est-elle en train de devenir?</ROM_ColonistWoreStraitjacket.stages.0.description>
+
+
+</LanguageData>
