@@ -11,6 +11,8 @@
   <HediffDef ParentName="COCSJ_DiseaseBase">
     <defName>ROM_RestainedByStraitjacket</defName>
     <label>restrained</label>
+    <labelNoun>restrained</labelNoun>
+	<description>restrained</description>
     <stages>
       <li>
         <capMods>
