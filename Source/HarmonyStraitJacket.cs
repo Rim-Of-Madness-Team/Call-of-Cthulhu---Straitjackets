@@ -1,4 +1,4 @@
-﻿using Harmony;
+﻿using HarmonyLib;
 using RimWorld;
 using System;
 using System.Collections.Generic;
@@ -36,7 +36,7 @@ namespace StraitJacket
          */
         static HarmonyStraitJacket()
         {
-            HarmonyInstance harmony = HarmonyInstance.Create("rimworld.jecrell.straitjacket");
+            Harmony harmony = new Harmony("rimworld.jecrell.straitjacket");
             harmony.Patch(AccessTools.Method(typeof(JobGiver_OptimizeApparel), "SetNextOptimizeTick"), new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("SetNextOptimizeTickPreFix")), null);
             harmony.Patch(AccessTools.Method(typeof(ITab_Pawn_Gear), "InterfaceDrop"), new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("InterfaceDropPreFix")), null);
             harmony.Patch(AccessTools.Method(typeof(MentalBreaker), "get_CurrentPossibleMoodBreaks"), null, new HarmonyMethod(typeof(HarmonyStraitJacket).GetMethod("CurrentPossibleMoodBreaksPostFix")), null);

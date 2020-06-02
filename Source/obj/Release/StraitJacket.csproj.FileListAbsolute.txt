@@ -9,3 +9,8 @@ C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cth
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.dll
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Assemblies\StraitJacket.dll
 C:\Program Files (x86)\Steam\steamapps\common\RimWorld\ModsWorkspace\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.csproj.CopyComplete
+D:\NL\Truc utile non classer\Git-build\Call-of-Cthulhu---Straitjackets\1.1\Assemblies\StraitJacket.dll
+D:\NL\Truc utile non classer\Git-build\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.csproj.CoreCompileInputs.cache
+D:\NL\Truc utile non classer\Git-build\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.csproj.CopyComplete
+D:\NL\Truc utile non classer\Git-build\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.dll
+D:\NL\Truc utile non classer\Git-build\Call-of-Cthulhu---Straitjackets\Source\obj\Release\StraitJacket.csprojAssemblyReference.cache
